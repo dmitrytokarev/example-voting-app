@@ -1,7 +1,7 @@
-import unittest
 import os
 import time
 
+import pytest
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -9,38 +9,34 @@ from selenium.webdriver.common.by import By
 ip = os.getenv('IP')
 
 # Give Selenium Hub time to start
-time.sleep(15)
+time.sleep(15)  # TODO: figure how to do this better
 
-class VoteTest(unittest.TestCase):
 
-  def setUp(self):
-    self.browser = webdriver.Remote(
-      command_executor='http://selenium_hub:4444/wd/hub',
-      desired_capabilities={'browserName': 'chrome'}
+@pytest.mark.fixture
+def browser():
+    browser = webdriver.Remote(
+        command_executor='http://selenium_hub:4444/wd/hub',
+        desired_capabilities={'browserName': 'chrome'},
     )
+    yield browser
+    browser.quit()
 
-  def test_confirm_title(self):
-    browser = self.browser
+
+def test_confirm_title(browser):
     browser.get("http://{}:80".format(ip))
-    self.assertIn("Cats vs Dogs!", browser.title)
+    assert "Cats vs Dogs!" in browser.title
 
-  def test_confirm_choice_form(self):
-    browser = self.browser
+
+def test_confirm_choice_form(browser):
     browser.get("http://{}:80".format(ip))
-    self.assertTrue(self.browser.find_element_by_id('choice'))
+    assert browser.find_element_by_id('choice') is True
 
-  def test_confirm_button_a(self):
-    browser = self.browser
+
+def test_confirm_button_a(browser):
     browser.get("http://{}:80".format(ip))
-    self.assertTrue(self.browser.find_element_by_id('a'))
+    assert browser.find_element_by_id('a') is True
 
-  def test_confirm_button_b(self):
-    browser = self.browser
+
+def test_confirm_button_b(browser):
     browser.get("http://{}:80".format(ip))
-    self.assertTrue(self.browser.find_element_by_id('b'))
-
-  def tear_down(self):
-    self.browser.quit()
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
+    assert browser.find_element_by_id('b') is True
