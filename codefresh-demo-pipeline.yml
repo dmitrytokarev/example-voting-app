@@ -102,7 +102,7 @@ steps:
         image: 'r.cfcr.io/${{CODEFRESH_ACCOUNT}}/codefresh/example-voting-app-tests:${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}'
         environment:
           IP: ${{IP}}
-        command: python -m pytest -vvv ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}/tests/selenium/test_app.py
+        command: python -m pytest -vvv --html=report.html --self-contained-html ${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}/tests/selenium/test_app.py
         volumes:
           - '${{CF_VOLUME_NAME}}:/codefresh/volume'
     add_flow_volume_to_composition: true
