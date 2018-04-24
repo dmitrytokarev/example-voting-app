@@ -12,7 +12,7 @@ ip = os.getenv('IP')
 time.sleep(15)  # TODO: figure how to do this better
 
 
-@pytest.mark.fixture
+@pytest.fixture(scope='module')
 def browser():
     browser = webdriver.Remote(
         command_executor='http://selenium_hub:4444/wd/hub',
